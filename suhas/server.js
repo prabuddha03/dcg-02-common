@@ -19,5 +19,5 @@ app.get('/me',(req, res)=>{
 })
 
 app.listen(3000, () => {
-    console.log(`erver is running on port ${port}`);
+    console.log(`server is running on port ${port}`);
 });
