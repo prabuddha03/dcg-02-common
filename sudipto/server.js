@@ -47,7 +47,7 @@ const products = [
 ];
 
 app.get ('/me', (req, res) =>{
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
         message: "Data fetched successfully",
         data: sudipto
