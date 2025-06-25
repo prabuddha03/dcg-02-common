@@ -49,7 +49,7 @@ app.get('/products', (req, res) => {
     });
 });
 
-const product = [
+const allproduct = [
     {
         id: '01',
         name: 'footcall',
@@ -63,7 +63,9 @@ const product = [
         status: 'notfresh'
     }
 ];
-app.post('/product1',(req, res) => {
+
+
+app.post('/products',(req, res) => {
     const product =req.body;
     console.log(product);
 
