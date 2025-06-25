@@ -1,7 +1,12 @@
 const express = require('express');
 
+require('dotenv').config();
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT;
+
+app.use(express.json());
+
+
 
 const Sagnik = {
     name:'sagnik',
@@ -18,7 +23,51 @@ app.get('/me',(req, res)=>{
 })
 
 
+const Products = [
+    {
+        id:'1',
+        name:'mobile'
+    },
+
+    {
+        id:'2',
+        name:'laptop'
+    },
+    
+    
+    {
+        id:'3',
+        name:'tvs'
+    }
+    
+
+]
+
+app.get('/products',(req, res)=>{
+    res.status(200).json({
+        status:'success',
+        message:'Data fetched succesfully',
+        data:Products
+    })
+})
+
+
+
+
+app.post('/products',(req,res)=>{
+    const products = req.body;
+    console.log(products)
+    res.status(201).json({
+        status:'success',
+        message:'product created successfully',
+        data:products
+    })
+})
+
+
+
+
 app.listen(3000,()=>{
 
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${PORT}`);
 })
