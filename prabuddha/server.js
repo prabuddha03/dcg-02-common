@@ -3,18 +3,18 @@ const express = require('express');//require is used to import the express modul
 const app = express();//app is the express application
 const port = 3000;//port is the port number on which the server will run
 
-const prabuddha = {//prabuddha is the data object
-    name: 'Prabuddha',
+const prabhat = {//prabhat is the data object
+    name: 'prabhat',
     hometown: 'Durgapur',
     degree: 'B.Tech',
-    email: 'prabuddha@gmail.com'
+    email: 'prabhat@gmail.com'
 }
 
 app.get('/me',(req, res)=>{//app.get is used to create a route
     res.status(200).json({//res.status is used to set the status code
         status: 'success',
         message: 'Data fetched successfully',
-        data: prabuddha
+        data: prabhat
     })
 })
 

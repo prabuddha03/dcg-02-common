@@ -1,0 +1,22 @@
+{
+  "name": "prabhat",
+  "version": "1.0.0",
+  "description": "Data Core Systems Assignments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prabuddha03/dcg-02-common.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prabuddha03/dcg-02-common/issues"
+  },
+  "homepage": "https://github.com/prabuddha03/dcg-02-common#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
