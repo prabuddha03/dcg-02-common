@@ -1,23 +1,66 @@
-const express = require('express');//require is used to import the express module
+const express = require('express');
+require('dotenv').config();
 
-const app = express();//app is the express application
-const port = 3000;//port is the port number on which the server will run
+const app = express();
 
-const prabuddha = {//prabuddha is the data object
+app.use(express.json());
+
+const PORT = process.env.PORT;
+
+const myDetails = {
     name: 'Prabuddha',
     hometown: 'Durgapur',
     degree: 'B.Tech',
     email: 'prabuddha@gmail.com'
 }
 
-app.get('/me',(req, res)=>{//app.get is used to create a route
-    res.status(200).json({//res.status is used to set the status code
+app.get('/me', (req, res) => {
+    res.status(200).json({
         status: 'success',
         message: 'Data fetched successfully',
-        data: prabuddha
+        data: myDetails
     })
-})
+});
 
-app.listen(port, () => {//app.listen is used to start the server
-    console.log(`Server is running on port ${port}`);//console.log is used to print the message to the console
+const allProduts = [
+    {
+        name: 'Product 1',
+        price: 100,
+        quantity: 10
+    },
+    {
+        name: 'Product 2',
+        price: 200,
+        quantity: 20
+    },
+    {
+        name: 'Product 3',
+        price: 300,
+        quantity: 30
+    }
+    ]
+
+app.get('/products', (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'Data fetched successfully',
+        data: allProduts
+    })
+
+});
+
+app.post('/products', (req, res) => {
+    const product = req.body;
+    console.log(product);
+
+
+    res.status(201).json({
+        status: 'success',
+        message: 'Product created successfully',
+        data: product
+    })
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`)
 });
