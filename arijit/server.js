@@ -25,7 +25,7 @@ app.get('/me',(req, res) => {
 
 });
 
-const allProduct = [
+const allProducts = [
     {
         id: 1,
         name: 'Apple',
@@ -47,24 +47,67 @@ const allProduct = [
 ]
 
 
-app.get('/products',(req,res) =>{
+app.get('/products/:id',(req,res) =>{
+    const { id } = req.params; //const id = req.params.id;
+    const product = allProducts[id];
     res.status(200).json({
-        status: 'success',
-        message: "Here is all product",
-        data: allProduct
-    })
+      status: "success",
+      message: "Data fetched successfully",
+      data: product,
+  });
+
 });
 
 
 app.post('/products', (req, res) =>{
-    const product = req.body;
+    const product=req.body;
+    
     console.log(product);
 
-    res.status(201).json({
+    let a= allProducts.push(product);
+    console.log(a);
+    console.log(allProdcuts);
+
+    res.status(200).json({
         status: 'success',
         message: 'Product created successfully',
         data: product
     })
+});
+
+    
+
+    
+
+   
+
+app.put('/products/:id', (req,res) => {
+    const newProduct= req.body;
+    const{id}=req.params;
+
+    allProducts[id]=newProduct;
+    console.log(allProducts)
+    res.status(200).json({
+        status: 'success',
+        message: 'Product updated successfully',
+        data: allProducts[id]
+    })
+
+});
+
+
+app.delete('/products/:id', (req,res) =>{
+    const{id}=req.params;
+    allProducts.splice(id, 1);
+    console.log(allProducts);
+    
+
+    res.status(204).json({
+        status: 'success',
+        message: 'Product deleted successfully',
+        
+    })
+
 });
 
 
