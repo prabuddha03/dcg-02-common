@@ -51,7 +51,11 @@ app.get('/products',(req,res) =>{
 });
 app.post('/products',(req,res) =>{
     const product =req.body;
-    console.log(product);
+    
+   let a = allproducts.push(product);
+    console.log(a);
+    console.log(allproducts);
+    
 
 
     res.status(200).json({
@@ -65,7 +69,60 @@ app.post('/products',(req,res) =>{
 
 
 
+}); 
+
+
+
+app.get("/products/:id",(req,res) =>{
+    const {id} =req.params;//const id = req.params.id;
+    const product =allproducts[id];
+    
+
+
+    res.status(200).json({
+        status:'success',
+        messege:'Data fethed successfully',
+        data: product
+
+    })
+    
+
 });
+
+app.put("/products/:id",(req,res) =>{
+    const newProduct = req.body;
+    const {id} = req.params;
+    allproducts[id] = newProduct;
+    console.log(allproducts);
+
+
+    res.status(200).json({
+        status:'success',
+        messege:'product edited sucessfully',
+        data: allproducts[id]
+
+    })
+
+
+});
+
+app.delete("/products/:id",(req,res) =>{
+    const {id} =req.params;
+    allproducts.splice(id,1);
+    console.log(allproducts);
+
+     res.status(204).json({
+        status:'success',
+        messege:'product deleted sucessfully',
+        
+     })
+
+
+
+});
+
+
+
   app.listen(PORT, () => {
     console.log(`Server is running port ${PORT}`);
   })
