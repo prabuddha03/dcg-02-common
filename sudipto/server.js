@@ -5,12 +5,12 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 
-const sudipto = {
-  name: "Sudipto",
-  hometown: "Kolkata",
-  degree: "B.Tech",
-  email: "sudipto@gmail.com",
-};
+// const sudipto = {
+//   name: "Sudipto",
+//   hometown: "Kolkata",
+//   degree: "B.Tech",
+//   email: "sudipto@gmail.com",
+// };
 
 // const products = {
 //   firstproduct: {
@@ -41,29 +41,26 @@ const allProducts = [
     price: "100",
   },
 
-  { id: 3, 
-    name: "Product 3",
-    price: "100" 
-  },
+  { id: 3, name: "Product 3", price: "100" },
 ];
 
-app.get("/me", (req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "Data fetched successfully",
-    data: sudipto,
-  });
-});
+// app.get("/me", (req, res) => {
+//   res.status(200).json({
+//     status: "success",
+//     message: "Data fetched successfully",
+//     data: sudipto,
+//   });
+// });
 
-app.get("/products", (req, res) => {
+const getAllProducts = (req, res) => {
   res.status(200).json({
     status: "success",
     message: "Data fetched successfully",
     data: allProducts,
   });
-});
+};
 
-app.post("/products", (req, res) => {
+const createProduct = (req, res) => {
   const product = req.body;
 
   console.log(product);
@@ -74,48 +71,115 @@ app.post("/products", (req, res) => {
   // console.log(allProducts.length);
   res.status(200).json({
     status: "success",
-    message: "Product crreated successfully",
+    message: "Product created successfully",
     data: product,
   });
-});
+};
 
-app.get ("/products/:id", (req, res) =>{
-    const { id } = req.params; //const id = req.params.id;
+const getProductById = (req, res) => {
+  const { id } = req.params; //const id = req.params.id;
+  if (id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+    return;
+  } else {
     const product = allProducts[id];
+    console.log(product);
     res.status(200).json({
       status: "success",
       message: "Data fetched successfully",
       data: product,
-  });
-});
+    });
+  }
+};
 
-app.put("/products/:id", (req, res) =>{
-    const newProduct = req.body;
-    const { id } = req.params; //const id = req.params.id;
-    allProducts[id]= newProduct;
-    console.log(allProducts);
-
-    res.status(200).json({
-      status: "success",
-      message: "Data updated successfully",
-      data: allProducts[id]
-  });
-});
-
-app.delete("/products/:id", (req, res)=>{
+const updateProduct = (req, res) => {
   const { id } = req.params; //const id = req.params.id;
+
+  if (id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+    return;
+  }
+
+  const newProduct = req.body;
+
+  allProducts[id] = newProduct;
+  console.log(allProducts);
+
+  res.status(200).json({
+    status: "success",
+    message: "Data updated successfully",
+    data: allProducts[id],
+  });
+};
+
+const deleteProduct = (req, res) => {
+  const { id } = req.params;
+
+  if (id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+    return;
+  }
+  //const id = req.params.id;
   allProducts.splice(id, 1);
 
   console.log(allProducts);
 
   res.status(204).json({
     status: "success",
-      message: "Data deleted successfully",
-      // data: allProducts[id]
+    message: "Data deleted successfully",
+    // data: allProducts[id]
   });
-});
+};
 
+// app.get ("/products/:id", (req, res) =>{
+//     const { id } = req.params; //const id = req.params.id;
+//     const product = allProducts[id];
+//     res.status(200).json({
+//       status: "success",
+//       message: "Data fetched successfully",
+//       data: product,
+//   });
+// });
 
+// app.delete("/products/:id", (req, res) => {
+//   const { id } = req.params; //const id = req.params.id;
+//   allProducts.splice(id, 1);
+
+//   console.log(allProducts);
+
+//   res.status(204).json({
+//     status: "success",
+//     message: "Data deleted successfully",
+//     // data: allProducts[id]
+//   });
+// });
+
+//Route
+
+app
+  .route("/products")
+  .get(getAllProducts)
+  .post(createProduct);
+app
+  .route("/products/:id")
+  .get(getProductById)
+  .put(updateProduct)
+  .delete(deleteProduct);
+
+// app.get("/products", getAllProducts);
+// app.post("/products", createProduct);
+// app.get("/products/:id", getProductById);
+// app.put("/products/:id", updateProduct);
+// app.delete("/products/:id", deleteProduct);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
