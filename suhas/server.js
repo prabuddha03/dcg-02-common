@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT;
 
-const shatrajeet = {
+const suhas = {
 	name: 'Suhas',
 	hometown: 'Fatepur',
 	degree: 'B.Tech',
