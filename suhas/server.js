@@ -19,6 +19,10 @@ const products = [
   {
     name: 'p2',
     productID: '2'
+  },
+  {
+    name: 'p3',
+    productID: '3'
   }
 ];
 app.get('/me', (req, res) => {
@@ -40,7 +44,11 @@ app.get('/products', (req, res) => {
 // create for post data from postmon
 app.post('/product', (req, res) => {
   const product = req.body;
-  console.log(product);
+
+  let a = products.push(product);
+  console.log(a);
+  console.log(products);
+
   res.status(201).json({
     status: 'success',
     message: 'product created successfully',
@@ -48,6 +56,45 @@ app.post('/product', (req, res) => {
   });
 });
 
+
+app.get('/product/:id', (req, res) => {       //here product this i can change
+  //console.log(req.params);
+  const { id } = req.params;      //Object Reconstruction //const id = req.params.id; //it can be possible
+  const product = products[id];
+  res.status(200).json({
+    status: 'success',
+    message: 'product fatched successfully',
+    data: product
+  });
+});
+
+
+//update
+app.put('/product/:id', (req, res) => {
+  const newProduct =req.body;
+  const {id} = req.params;
+
+  products[id] = newProduct;
+  console.log(products);
+  res.status(200).json({
+    status:'success',
+    message:'product edited sucessfull',
+    data: products[id]
+  })
+});
+
+
+//delete
+app.delete('/product/:id', (req, res) => {
+  const {id} = req.params;
+
+  products.splice(id, 1);
+  console.log(products);
+  res.status(204).json({
+    status:'success',
+    message:'product deleted sucessfull',
+  })
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
