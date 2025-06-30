@@ -1,6 +1,8 @@
 const express = require("express");
-require('dotenv').config();
+const connectDB= require("./config/db");
+const tourRoutes = require("./routes/tourRoutes");
 
+require("dotenv").config();
 
 const app = express();
 
@@ -8,66 +10,129 @@ app.use(express.json());
 
 const PORT = process.env.PORT;
 
+connectDB();
+
 const myDetails = {
-    name: 'Arijit',
-    hometown: 'Falta',
-    degree: 'B.Tech',
-    email: 'ghosharijit184@gmail.com'
-}
+  name: "Arijit",
+  hometown: "Falta",
+  degree: "B.Tech",
+  email: "ghosharijit184@gmail.com",
+};
 
-app.get('/me',(req, res) => {
+const allProducts = [
+  {
+    id: 1,
+    name: "Apple",
+    price: 1000,
+  },
+
+  {
+    id: 2,
+    name: "Banana",
+    price: 500,
+  },
+
+  {
+    id: 3,
+    name: "Cherry",
+    price: 2000,
+  },
+];
+
+const getAllProducts = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Data fetched successfully",
+    data: myDetails,
+  });
+};
+
+const creatProduct = (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(404).json({
+      status: "error",
+      message: "product not found",
+    });
+    return;
+  }
+
+  if (req.params.id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "product not found",
+    });
+    return;
+  } else {
+    console.log(req.params);
+    const { id } = req.params; //const id = req.params.id;
+    const product = allProducts[id];
     res.status(200).json({
-        status: 'success',
-        message: 'Data fetched successfully',
-        data: myDetails
+      status: "success",
+      message: "Data fetched successfully",
+      data: product,
+    });
+  }
+};
+const getProductById = (req, res) => {
+  const product = req.body;
 
-    })
+  console.log(product);
 
-});
+  let a = allProducts.push(product);
+  console.log(a);
+  console.log(allProdcuts);
 
-const allProduct = [
-    {
-        id: 1,
-        name: 'Apple',
-        price: 1000
-    },
+  res.status(200).json({
+    status: "success",
+    message: "Product created successfully",
+    data: product,
+  });
+};
+const updateProduct = (req, res) => {
+  const newProduct = req.body;
+  const { id } = req.params;
 
-   {
-        id: 2,
-        name: 'Banana',
-        price: 500
-    },
+  allProducts[id] = newProduct;
+  console.log(allProducts);
+  res.status(200).json({
+    status: "success",
+    message: "Product updated successfully",
+    data: allProducts[id],
+  });
+};
+const deleteProduct = (req, res) => {
+  const { id } = req.params;
+  allProducts.splice(id, 1);
+  console.log(allProducts);
 
-    {
-        id: 3,
-        name: 'Cherry',
-        price: 2000
-    }
+  if (req.params.id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "product not found",
+    });
+    return;
+  } else {
+    res.status(204).json({
+      status: "success",
+      message: "Product deleted successfully",
+    });
+  }
+};
 
-]
+app
+   .route("/products")
+   .get(getAllProducts)
+   .post(creatProduct);
 
+app
+  .route("products/:id")
+  .get(getProductById)
+  .put(updateProduct)
+  .delete(deleteProduct);
 
-app.get('/products',(req,res) =>{
-    res.status(200).json({
-        status: 'success',
-        message: "Here is all product",
-        data: allProduct
-    })
-});
-
-
-app.post('/products', (req, res) =>{
-    const product = req.body;
-    console.log(product);
-
-    res.status(201).json({
-        status: 'success',
-        message: 'Product created successfully',
-        data: product
-    })
-});
-
+app.use("/api/v1/tours", tourRoutes);
 
 app.listen(PORT, () => {
-      console.log(`server is running on port ${PORT}`);
+  console.log(`server is running on port ${PORT}`);
 });
