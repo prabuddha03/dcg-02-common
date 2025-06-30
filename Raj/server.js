@@ -1,4 +1,7 @@
 const express = require('express');
+const connectDB = require("./config/db");
+const tourRoutes = require("./routes/tourRoutes");
+
 require('dotenv').config();
 
 const app = express();
@@ -6,6 +9,8 @@ const app = express();
 app.use(express.json());
 
 const port = process.env.port;
+
+connectDB();
 
 const Raj = {
     name: 'Raj',
@@ -60,6 +65,9 @@ app.post('/products',(req, res)=>{
         data: product
     })
 });
+
+
+app.use("/api/v1/tours", tourRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
