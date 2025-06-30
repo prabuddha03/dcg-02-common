@@ -1,9 +1,12 @@
 const express = require('express');//require is used to import the express module
+const connectDB =require("./config/db");
+const tourRoutes = require("./routes/tourRoutes");
 require(`dotenv`).config();
 const app = express();//app is the express application
 app.use(express.json());
 const port = process.env.port;//port is the port number on which the server will run
 
+connectDB()
 const MyBio = {//prabuddha is the data object
     name: 'surajit',
     hometown: 'pingla',
@@ -57,6 +60,11 @@ app.post('/products',(req, res)=>{//app.get is used to create a route
         data: products
     })
 })
+app.use("/api/v1/tours", tourRoutes);
+
 app.listen(port, () => {//app.listen is used to start the server
     console.log(`Server is running on port ${port}`);//console.log is used to print the message to the console
 });
+
+
+
