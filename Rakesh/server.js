@@ -1,5 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const connectDb=require('./config/db')
+
+const tourRoute= require('./routes/tourRoutes')
+
 require('dotenv').config();
 
 
@@ -9,6 +12,8 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT;
+
+connectDb();
 
 const myDetails = {
     name: 'Prabuddha',
@@ -63,6 +68,8 @@ app.post('/products', (req, res) => {
         data: product
     })
 });
+
+app.use("/api/v1/tours", tourRoute)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
