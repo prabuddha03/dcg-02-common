@@ -1,81 +1,74 @@
 const express = require('express');
+const connectDb=require('./config/db')
+const tourRoutes= require("./routes/tourRoutes");
 require('dotenv').config();
 
+
+
 const app = express();
+
 app.use(express.json());
 
 const PORT = process.env.PORT;
 
+connectDb();
+
 const myDetails = {
-    name: 'mehbub',
-    hometown: 'sarisha',
-    degree: 'cse',
-    email: 'mehbubofficial2002@gmail.com'
-};
+    name: 'Prabuddha',
+    hometown: 'Durgapur',
+    degree: 'B.Tech',
+    email: 'prabuddha@gmail.com'
+}
 
 app.get('/me', (req, res) => {
     res.status(200).json({
         status: 'success',
-        message: 'data fetched successfully',
+        message: 'Data fetched successfully',
         data: myDetails
-    });
+    })
 });
 
-const myproduct = [
+const allProduts = [
     {
-        id: '01',
-        name: 'apple',
-        brand: 'lv',
-        status: 'fresh'
+        name: 'Product 1',
+        price: 100,
+        quantity: 10
     },
     {
-        id: '02',
-        name: 'banana',
-        brand: 'gg',
-        status: 'notfresh'
+        name: 'Product 2',
+        price: 200,
+        quantity: 20
     },
     {
-        id: '03',
-        name: 'kiwi',
-        brand: 'pd',
-        status: 'fresh'
+        name: 'Product 3',
+        price: 300,
+        quantity: 30
     }
-];
+    ]
 
 app.get('/products', (req, res) => {
     res.status(200).json({
-        message: 'data fetched succesfully',
-        data: myproduct
-    });
+        status: 'success',
+        message: 'Data fetched successfully',
+        data: allProduts
+    })
+
 });
 
-const allproduct = [
-    {
-        id: '01',
-        name: 'footcall',
-        brand: 'lv',
-        status: 'fresh'
-    },
-    {
-        id: '02',
-        name: 'cricket',
-        brand: 'gg',
-        status: 'notfresh'
-    }
-];
-
-
-app.post('/products',(req, res) => {
-    const product =req.body;
+app.post('/products', (req, res) => {
+    const product = req.body;
     console.log(product);
 
+
     res.status(201).json({
-        status:'succes',
-        message: 'product created succesfully',
+        status: 'success',
+        message: 'Product created successfully',
         data: product
     })
-})
+});
+
+app.use("/api/v1/tours",tourRoutes);
 
 app.listen(PORT, () => {
-    console.log(`server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`)
 });
