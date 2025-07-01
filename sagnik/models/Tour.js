@@ -12,7 +12,7 @@ const tourSchema = new mongoose.Schema({
         type: Number,
     },
 
-    descreption:  {
+    description:  {
         type: String,
         required: true,
     },
@@ -23,3 +23,5 @@ const tourSchema = new mongoose.Schema({
 
 }
 )
+
+module.exports = mongoose.model("Tour",tourSchema)

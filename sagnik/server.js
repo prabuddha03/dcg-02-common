@@ -1,8 +1,9 @@
 const express = require('express');
-
+const morgan = require("morgan");
 
 
 const tourRoutes = require("./routes/tourRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 
 
@@ -14,6 +15,7 @@ const connectDB = require("./config/db");
 connectDB();
 
 app.use(express.json());
+app.use(morgan("dev"));
 
 
 
@@ -77,6 +79,8 @@ app.post('/products',(req,res)=>{
 
 
 app.use("/api/v1/tours", tourRoutes);
+app.use("/api/v1/auth", authRoutes);
+
 
 
 
