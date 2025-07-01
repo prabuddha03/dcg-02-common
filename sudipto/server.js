@@ -1,11 +1,14 @@
 const express = require("express");
+const morgan = require("morgan");
 const connectDB = require("./config/db");
 require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT;
 const tourRoutes = require("./routes/tourRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 app.use(express.json());
+app.use(morgan("dev"));
 
 connectDB();
 
@@ -169,10 +172,7 @@ const deleteProduct = (req, res) => {
 
 //Route
 
-app
-  .route("/products")
-  .get(getAllProducts)
-  .post(createProduct);
+app.route("/products").get(getAllProducts).post(createProduct);
 app
   .route("/products/:id")
   .get(getProductById)
@@ -186,8 +186,7 @@ app
 // app.delete("/products/:id", deleteProduct);
 
 app.use("/api/v1/tours", tourRoutes);
-
-
+app.use("/api/v1/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
