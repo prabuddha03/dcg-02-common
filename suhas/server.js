@@ -1,10 +1,14 @@
 const express = require('express');
 const connectDB = require("./config/db");
+const morgan = require("morgan");
+
 const tourRoutes = require("./routes/tourRoutes");
+const authRoutes = require("./routes/authRoutes");
 require(`dotenv`).config();
 
 const app = express();
 app.use(express.json());
+app.use(morgan("dev"));
 const PORT = process.env.PORT;
 
 connectDB();
@@ -133,6 +137,7 @@ app.route('/products').get(getallProducts).post(createProduct);
 app.route('/products/:id').get(getProductbyID).put(updateProduct).delete(deleteProduct);
 
 app.use("/api/v1/tours", tourRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
