@@ -1,6 +1,11 @@
 const express = require('express');
 const connectDb=require('./config/db')
-const tourRoutes= require("./routes/tourRoutes");
+const morgan= require('morgan')
+
+const tourRoute= require('./routes/tourRoutes')
+
+const authRoutes= require('./routes/authRoutes')
+
 require('dotenv').config();
 
 
@@ -67,7 +72,8 @@ app.post('/products', (req, res) => {
     })
 });
 
-app.use("/api/v1/tours",tourRoutes);
+app.use("/api/v1/tours", tourRoute)
+app.use("/api/v1/auth", authRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
