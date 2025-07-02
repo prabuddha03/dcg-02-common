@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const tourRoutes = require("./routes/tourRoutes");
+const authRoutes = require("./routes/authRoutes")
 require("dotenv").config();
 
 const app = express();
@@ -137,6 +138,7 @@ app
 
  
 app.use ("/api/v1/tour",tourRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

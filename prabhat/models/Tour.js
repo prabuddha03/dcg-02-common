@@ -1,5 +1,3 @@
-
-
 const mongoose = require("mongoose");
 
 const tourSchema = new mongoose.Schema({
@@ -8,15 +6,16 @@ const tourSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    price:{
+    price: {
         type: Number,
     },
     description: {
         type: String,
-        required: true,
+        require: true,
     },
-    image:{
+    image: {
         type: String,
     },
-})
-module.exports = mongoose.model("Tour",tourSchema);
+});
+
+module.exports = mongoose.model("Tour", tourSchema);
