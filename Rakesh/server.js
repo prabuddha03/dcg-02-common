@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDb=require('./config/db')
+const morgan= require('morgan')
 
 const tourRoute= require('./routes/tourRoutes')
 
@@ -70,6 +71,7 @@ app.post('/products', (req, res) => {
 });
 
 app.use("/api/v1/tours", tourRoute)
+app.use("/api/v1/auth", authRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
