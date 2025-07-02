@@ -13,10 +13,10 @@ const PORT = process.env.PORT;
 connectDB();
 
 const myDetails = {
-  name: "prabhat",
+  name: "arnab",
   hometown: "shapoorji",
   degree: "B.Tech",
-  email: "Prabhat@gmail.com",
+  email: "arnab@gmail.com",
 };
 
 app.get("/me", (req, res) => {
