@@ -1,12 +1,16 @@
 const express = require("express");
-
+const morgan = require("morgan");
+const connectDB = require("./config/db");
+const tourRoutes = require("./routes/tourRoutes");
+const authRoutes = require("./routes/authRoutes");
 require("dotenv").config();
 
 const app = express();
-
 app.use(express.json());
-
+app.use(morgan("dev"));
 const PORT = process.env.PORT;
+
+connectDB();
 
 const myDetails = {
   name: "Rishad",
@@ -138,6 +142,9 @@ app
 // app.get('/products/:id', getProductById);
 // app.put('/products/:id', updateProduct);
 // app.delete('/products/:id', deleteProduct);
+
+app.use("/api/v1/tours", tourRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
