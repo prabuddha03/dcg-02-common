@@ -2,7 +2,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 const tourRoutes = require("./routes/tourRoutes");
 const authRoutes = require("./routes/authRoutes");
-
+const morgan = require("morgan");
 require("dotenv").config();
 
 const app = express();

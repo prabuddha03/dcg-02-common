@@ -1,5 +1,5 @@
 const Tour = require("../models/Tour");
-
+const catchAsync = require("../utils/catchAsync");
 exports.createTour = async (req, res) => {
   try {
     const newTour = await Tour.create(req.body);
@@ -14,19 +14,14 @@ exports.createTour = async (req, res) => {
   }
 };
 
-exports.getAllTours = async (req, res) => {
-  try {
+exports.getAllTours = catchAsync(async (req, res) => {
     const tours = await Tour.find();
     res.status(200).json({
       status: "success",
       message: "Tours fetched successfully",
       data: tours,
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-};
+});
 
 exports.getTourById = async (req, res) => {
   try {
