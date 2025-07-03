@@ -1,4 +1,6 @@
 const Tour = require("../models/Tour");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 
 // const createTour = async (req, res) => {
 exports.createTour = async (req, res) => {
@@ -17,19 +19,20 @@ exports.createTour = async (req, res) => {
 };
 
 // const getAllTours = async (req,res) => {
-exports.getAllTours = async (req, res) => {
-  try {
+exports.getAllTours = catchAsync(async (req, res) => {
+  // try {
     const tours = await Tour.find();
     res.status(200).json({
       status: "success",
       message: "All tours fetched successfully",
       data: tours,
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-};
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(500).json(error);
+  // }
+  return next(new AppError("Missing required fields", 400));
+});
 
 exports.getTourById = async (req, res) => {
   try {
