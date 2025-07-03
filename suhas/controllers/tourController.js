@@ -1,5 +1,5 @@
 const Tour = require("../models/Tour");
-
+//const catchAsync = require("../utils")
 exports.createTour = async (req, res) => {
     try {
         const newTour = await Tour.create(req.body);
