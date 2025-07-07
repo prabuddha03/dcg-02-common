@@ -1,10 +1,18 @@
 const express=require("express");
 const router = express.Router();
-const tourController = require("../controllers/tourControllers");
+const tourController = require("../controllers/tourController");
+const authController = require("../controllers/authController");
 
 router
 .route("/")
-.post ( tourController.createTour)
-.get (tourController.getAllTours);
+.post ( authController.protect,tourController.createTour)
+.get (authController.protect,tourController.getAllTours);
+
+router
+.route("/:id")
+.get(tourController.getTourById)
+.patch(authController.protect, authController.restrictTo("admin", "moderator"), tourController.updateTour)
+.delete(tourController.deleteTour);
+
 
 module.exports = router;
