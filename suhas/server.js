@@ -4,6 +4,8 @@ const morgan = require("morgan");
 
 const tourRoutes = require("./routes/tourRoutes");
 const authRoutes = require("./routes/authRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+
 require(`dotenv`).config();
 
 const app = express();
@@ -12,6 +14,12 @@ app.use(morgan("dev"));
 const PORT = process.env.PORT;
 
 connectDB();
+
+// app.use(cors({
+// 	origin: "*",
+// 	credentials: true,
+// }));
+
 
 const suhas = {
 	name: 'Suhas',
