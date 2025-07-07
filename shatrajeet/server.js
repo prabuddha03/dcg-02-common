@@ -1,23 +1,160 @@
-const express= require("express");
+const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
 
-const app =express();
-const port =3000;
+const connectDB = require("./config/db");
+const tourRoutes= require("./routes/tourRoutes");
+const authRoutes= require("./routes/authRoutes");
+const bookingRoutes= require("./routes/bookingRoutes");
 
-const shatrajeet={
-    name:"Shatrajeet",
-    hometown:"Kolkata",
-    degree:"B.Tech",
-    email:"shatrajeet2005@gmail.com"
-}
+require(`dotenv`).config();
 
-app.get('/me',(req,res)=>{
+const app = express();
+app.use(express.json());
+
+app.use(morgan("dev"));
+
+const PORT = process.env.PORT;
+
+connectDB();
+
+app.use(cors({
+  origin : "*",
+  credentials : true,
+}));
+
+const shatrajeet = {
+  name: "Shatrajeet",
+  hometown: "Kolkata",
+  degree: "B.Tech",
+  email: "shatrajeet2005@gmail.com",
+};
+
+const allProducts = [
+  {
+    id: "product01",
+    name: "Laptop",
+    price: "3000",
+    quantity: "20",
+  },
+  {
+    id: "product02",
+    name: "Mobile",
+    price: "1000",
+    quantity: "30",
+  },
+  {
+    id: "product03",
+    name: "TV",
+    price: "5000",
+    quantity: "10",
+  },
+];
+
+app.get("/me", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Data fetched successfully",
+    data: shatrajeet,
+  });
+});
+
+const getallProducts = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Data fetched successfully",
+    data: allProducts,
+  });
+};
+
+const createProduct = (req, res) => {
+  const product = req.body;
+
+  let a = allProducts.push(product);
+  console.log(a);
+  console.log(allProducts);
+
+  res.status(201).json({
+    status: "success",
+    message: "Product created successfully",
+    data: product,
+  });
+};
+
+const getProductbyID = (req, res) => {
+  const { id } = req.params;
+  if (req.params.id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+    return;
+  } else {
+    const product = allProducts[id];
     res.status(200).json({
-        status:"success",
-        message:"Data fetched successfully",
-        data: shatrajeet
-    })
-})
+      status: "success",
+      message: "Data fetched successfully",
+      data: product,
+    });
+  }
+};
 
-app.listen ( port,()=>{
-    console.log(`Server is running on port ${port}`);
+const updateProduct = (req, res) => {
+  const { id } = req.params;
+
+  if (req.params.id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+    return;
+  }
+  const newProduct = req.body;
+
+  allProducts[id] = newProduct;
+  console.log(allProducts);
+
+  res.status(200).json({
+    status: "success",
+    message: "Data edited successfully",
+    data: allProducts[id],
+  });
+};
+
+const deleteProduct = (req, res) => {
+  const { id } = req.params;
+
+  if (req.params.id >= allProducts.length) {
+    res.status(404).json({
+      status: "error",
+      message: "Product not found",
+    });
+    return;
+  }
+
+  allProducts.splice(id, 1);
+  console.log(allProducts);
+
+  res.status(204).json({
+    status: "success",
+    message: "Data deleted successfully",
+  });
+};
+
+//Routes
+
+app.route("/products").get(getallProducts).post(createProduct);
+
+app
+  .route("/products/:id")
+  .get(getProductbyID)
+  .put(updateProduct)
+  .delete(deleteProduct);
+  
+app.use("/api/v1/tours",tourRoutes);
+app.use("/api/v1/auth",authRoutes);
+app.use("/api/v1/booking",bookingRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
