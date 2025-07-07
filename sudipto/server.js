@@ -6,11 +6,17 @@ const app = express();
 const PORT = process.env.PORT;
 const tourRoutes = require("./routes/tourRoutes");
 const authRoutes = require("./routes/authRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 app.use(express.json());
 app.use(morgan("dev"));
 
 connectDB();
+
+// app.use(cors({
+//   origin : "*",  //*=url of frontend
+//   credentials : true,
+// }))
 
 // const sudipto = {
 //   name: "Sudipto",
@@ -187,6 +193,7 @@ app
 
 app.use("/api/v1/tours", tourRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
