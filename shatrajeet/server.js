@@ -1,9 +1,11 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const connectDB = require("./config/db");
 const tourRoutes= require("./routes/tourRoutes");
 const authRoutes= require("./routes/authRoutes");
+const bookingRoutes= require("./routes/bookingRoutes");
 
 require(`dotenv`).config();
 
@@ -15,6 +17,11 @@ app.use(morgan("dev"));
 const PORT = process.env.PORT;
 
 connectDB();
+
+app.use(cors({
+  origin : "*",
+  credentials : true,
+}));
 
 const shatrajeet = {
   name: "Shatrajeet",
@@ -146,6 +153,7 @@ app
   
 app.use("/api/v1/tours",tourRoutes);
 app.use("/api/v1/auth",authRoutes);
+app.use("/api/v1/booking",bookingRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

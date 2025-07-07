@@ -8,10 +8,11 @@ router
   .post(authController.protect , tourController.createTour)
   .get(authController.protect , tourController.getAllTours);
 
+
 router
   .route("/:id")
   .get(tourController.getTourById)
-  .patch(tourController.updateTour)
+  .patch(authController.protect, authController.restrictTo("admin"),tourController.updateTour)
   .delete(tourController.deleteTour);
 
 module.exports = router;

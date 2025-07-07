@@ -48,11 +48,14 @@ exports.signup = catchAsync(async (req,res,next) => {
             return next (new AppError("User already exists",409));
         }
              
-        const newUser= await User.create(req.body);
+        const newUser= await User.create({
+            name : req.body.name,
+            email : req.body.email,
+            password : req.body.password
+        });
 
         createSendToken(newUser,201,res);
 
-        
 });
 
 
@@ -102,6 +105,18 @@ exports.protect= catchAsync(async (req,res,next) =>{
     req.user = currentUser;
     next();
 });
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if(!roles.includes(req.user.roles)) {
+            return next(new AppError("You are not authorized to accessthis resource",403));
+        }
+        next();
+    }
+};
+
+
+
 
 //Update password
 //Forget password
