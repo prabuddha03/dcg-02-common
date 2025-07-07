@@ -39,9 +39,13 @@ exports.signup = catchAsync(async (req, res) => {
         }
         const user = await User.findOne({email: req.body.email});
         if(user) {
-            return next(new AppError("Missing reqired fields",400));
+            return next(new AppError("User already exists",400));
         }
-        const newUser = await User.create(req.body);
+        const newUser = await User.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password
+        });
         createSendToken(newUser, 201, res);
 });
 
@@ -85,3 +89,12 @@ exports.protect = catchAsync(async(req, res, next) => {
     req.user = currentUser;
     next();
 });
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if(!roles.includes(req.user.roles)) {
+            return next(new AppError("You are not authorized to access this resource",403));
+        }
+        next();
+    }
+}
