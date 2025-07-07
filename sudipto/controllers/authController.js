@@ -2,7 +2,7 @@ const User = require("../models/User");
 const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
 const catchAsync = require("../utils/catchAsync");
-const { promisify} = require("util");
+const { promisify } = require("util");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -50,7 +50,12 @@ exports.signUp = catchAsync(async (req, res, next) => {
     return next(new AppError("User already exists", 409));
   }
 
-  const newUser = await User.create(req.body);
+  // const newUser = await User.create(req.body);
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password
+  }); //used to prevent anyone singedUp as admin through postman
 
   // res.status(201).json({
   //   status: "Success",
@@ -89,7 +94,7 @@ exports.logIn = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-//exports.protect
+//exports.protect used to check authentication
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   if (
@@ -113,6 +118,17 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+//restrictTo used to check if user is authorized or not
+exports.restrictTo = (...roles) =>{
+  return (req, _res, next) =>{
+    if(!roles.includes(req.user.role)){
+      return next(new AppError("You are not authorized to access this route", 403));
+    } 
+    next();
+  }
+}
+//factory function
 
 //exports.restrict to
 //exports.forgotPassword
