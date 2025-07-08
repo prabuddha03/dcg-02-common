@@ -48,7 +48,12 @@ exports.signup = catchAsync(async (req, res, next) => {
     return next(new AppError("Email already exists", 400));
   }
 
-  const newUser = await User.create(req.body);
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    // passwordConfirm: req.body.passwordConfirm, // Assuming you have a passwordConfirm field
+  });
   createSendToken(newUser, 201, res);
 });
 
@@ -112,3 +117,12 @@ exports.protect = catchAsync(async (req, res, next) => {
 // exports.forgotPassword
 // exports.resetPassword
 // exports.updatePassword
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new AppError("You do not have permission to perform this action", 403));
+    }
+    next();
+  };
+};
